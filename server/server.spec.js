@@ -4,7 +4,8 @@ const http = require('http');
 const PinsRouter = require('./routes/pins');
 const Pins = require('./models/Pins');
 const request = require('request');
-const axios = require('axion');
+const axios = require('axios');
+requestPromise = require('request-promise-native');
 const app = express();
 
 
@@ -113,17 +114,15 @@ describe('Testing Router', () => {
         description: 'Piero rules',
         percentage: 0,
         tags: [],
-        assets: [
-          {
-            title: 'Piero',
-            description: 'description',
-            readed: false,
-            url: 'http://piero.com'
-          }
-        ]
+        assets: [{
+          title: 'Piero',
+          description: 'description',
+          readed: false,
+          url: 'http://piero.com'
+        }]
       }]
       spyOn(Pins, 'create').and.callFake((pin, callBack) => {
-        callBack(false, data);
+        callBack(false, {});
       })
 
       spyOn(requestPromise, 'get').and.returnValue(
@@ -142,6 +141,52 @@ describe('Testing Router', () => {
         expect(res.status).toBe(200);
         done();
       })
+    })
+
+    it('200 PDF', done => {
+      spyOn(Pins, 'create').and.callFake((pins, callBack) => {
+        callBack(false, {})
+      })
+
+      const assets = [{
+        url: 'http://piero.pdf'
+      }]
+
+      axios.post('http://localhost:3000/api', {
+        title: 'title',
+        author: 'author',
+        description: 'description',
+        assets
+      }).then(res => {
+        expect(res.status).toBe(200);
+        done();
+      })
+    })
+
+    it('500 PDF', done => {
+      spyOn(Pins, 'create').and.callFake((pins, callBack) => {
+        callBack(false, {});
+      });
+
+      spyOn(requestPromise, "get").and.returnValue(
+
+      );
+
+      const assets = [{
+        url: 'http://piero.com'
+      }];
+
+      axios.post('http://localhost:3000/api', {
+          title: 'title',
+          author: 'author',
+          description: 'description',
+          assets
+        })
+        .catch(error => {
+          expect(error.response.status).toBe(500);
+          done()
+        })
+
     })
   })
 })
