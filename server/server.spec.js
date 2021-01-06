@@ -4,6 +4,7 @@ const http = require('http');
 const PinsRouter = require('./routes/pins');
 const Pins = require('./models/Pins');
 const request = require('request');
+const axios = require('axion');
 const app = express();
 
 
@@ -102,5 +103,45 @@ describe('Testing Router', () => {
         done();
       });
     });
+  })
+
+  describe('POST', () => {
+    it('200', done => {
+      const post = [{
+        title: 'Piero',
+        author: 'Piero',
+        description: 'Piero rules',
+        percentage: 0,
+        tags: [],
+        assets: [
+          {
+            title: 'Piero',
+            description: 'description',
+            readed: false,
+            url: 'http://piero.com'
+          }
+        ]
+      }]
+      spyOn(Pins, 'create').and.callFake((pin, callBack) => {
+        callBack(false, data);
+      })
+
+      spyOn(requestPromise, 'get').and.returnValue(
+        Promise.resolve('<title>Piero</title><meta name="description" content="Piero rules">')
+      )
+
+      const assets = [{
+        url: 'http://piero.com'
+      }]
+      axios.post('http://localhost:3000/api', {
+        title: 'title',
+        author: 'author',
+        description: 'description',
+        assets
+      }).then(res => {
+        expect(res.status).toBe(200);
+        done();
+      })
+    })
   })
 })
