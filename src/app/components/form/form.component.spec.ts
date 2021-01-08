@@ -1,16 +1,59 @@
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatSnackBar } from '@angular/material';
+import { of } from 'rxjs';
+import { NavigationService } from 'src/app/services/navigation.service';
+import { RepositoryService } from 'src/app/services/repository.service';
 
 import { FormComponent } from './form.component';
 
-describe('FormComponent', () => {
+class RepositoryServiceStub {
+  savePins() {
+    return of(true);
+  }
+}
+
+class NavigationServiceStub {
+  goToPins() {
+
+  }
+}
+
+class MatSnackBarStub {
+  open() {
+    return {
+      afterDismissed: () => {
+        return of(true);
+      }
+    };
+  }
+}
+
+fdescribe('FormComponent', () => {
   let component: FormComponent;
   let fixture: ComponentFixture<FormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FormComponent ]
+      declarations: [FormComponent],
+      providers: [
+        // If we add the RepositoryService the way it shows, we will be doing integration test istead of unit test.
+        // So we have to simulate the behaviour of the service
+        // RepositoryService
+        { provide: RepositoryService, useClass: RepositoryServiceStub },
+        { provide: NavigationService, useClass: NavigationServiceStub },
+        { provide: MatSnackBar, useClass: MatSnackBarStub }
+      ],
+      // NO_ERRORS_SCHEMA -> Defines a schema that allows any property on any element.
+      // CUSTOM_ELEMENTS_SCHEMA Defines a schema that allows an NgModule to contain the following:
+        // Non-Angular elements named with dash case (`-`).
+        // Element properties named with dash case (`-`).
+        // Dash case is the naming convention for custom elements.
+      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
+      imports: [ReactiveFormsModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
