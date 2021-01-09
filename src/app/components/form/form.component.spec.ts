@@ -47,9 +47,9 @@ fdescribe('FormComponent', () => {
       ],
       // NO_ERRORS_SCHEMA -> Defines a schema that allows any property on any element.
       // CUSTOM_ELEMENTS_SCHEMA Defines a schema that allows an NgModule to contain the following:
-        // Non-Angular elements named with dash case (`-`).
-        // Element properties named with dash case (`-`).
-        // Dash case is the naming convention for custom elements.
+      // Non-Angular elements named with dash case (`-`).
+      // Element properties named with dash case (`-`).
+      // Dash case is the naming convention for custom elements.
       schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
       imports: [ReactiveFormsModule]
     })
@@ -65,4 +65,13 @@ fdescribe('FormComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('When component is initializated', () => {
+    it('Should create the forms of the FormComponent', () => {
+      console.log('controls', Object.keys(component.firstFormGroup.controls));
+      expect(Object.keys(component.firstFormGroup.controls)).toEqual(['title', 'author', 'description']);
+      expect(Object.keys(component.secondFormGroup.controls)).toEqual(['firstAsset', 'assets']);
+    });
+  });
+
 });
