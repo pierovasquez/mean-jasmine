@@ -1,6 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormArray, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { of } from 'rxjs';
 import { NavigationService } from 'src/app/services/navigation.service';
@@ -74,4 +74,14 @@ fdescribe('FormComponent', () => {
     });
   });
 
+  describe('When addAsset is executed', () => {
+    it('should add new asset', () => {
+      const assets = <FormArray>component.secondFormGroup.get('assets');
+
+      component.addAsset();
+      component.addAsset();
+      console.log('assets', Object.keys(assets.controls));
+      expect(Object.keys(assets.controls)).toEqual(['0', '1']);
+    });
+  });
 });
