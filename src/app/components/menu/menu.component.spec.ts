@@ -24,4 +24,11 @@ fdescribe('MenuComponent', () => {
     const title = fixture.debugElement.query(By.css('h1'));
     expect(title.nativeElement.innerHTML).toBe('eLearning Management System');
   });
+  it('Testing output', () => {
+    const value = true;
+    component.clicked.subscribe((result) => {
+      expect(result).toBe(value);
+    });
+    component.clicked.next(value);
+  });
 });
