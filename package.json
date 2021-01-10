@@ -6,6 +6,7 @@
     "start": "ng build && node ./server/bin/www",
     "build": "ng build",
     "test": "ng test",
+    "test-front:coverage": "ng test --codeCoverage",
     "test:server": "./node_modules/jasmine/bin/jasmine.js",
     "test:server:coverage": "node spec/specs.js",
     "test:server:coverage-nyc": "nyc node spec/specs.js",
