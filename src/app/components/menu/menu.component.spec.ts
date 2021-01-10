@@ -1,8 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { MenuComponent } from './menu.component';
 
-describe('MenuComponent', () => {
+fdescribe('MenuComponent', () => {
   let component: MenuComponent;
   let fixture: ComponentFixture<MenuComponent>;
 
@@ -20,6 +21,7 @@ describe('MenuComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const title = fixture.debugElement.query(By.css('h1'));
+    expect(title.nativeElement.innerHTML).toBe('eLearning Management System');
   });
 });
