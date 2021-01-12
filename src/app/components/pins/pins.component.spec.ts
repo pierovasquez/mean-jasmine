@@ -24,10 +24,6 @@ class RepositoryServiceStub {
   updatePin() {
     return of(true);
   }
-
-  resolveUpdatePin() {
-
-  }
 }
 
 class MatSnackBarStub {
@@ -70,5 +66,24 @@ fdescribe('PinsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('when new page is open', () => {
+    const open = spyOn(window, 'open');
+
+    component.openUrl('https://piero.com');
+
+    expect(open).toHaveBeenCalledWith('https://piero.com', '_blank');
+  });
+
+  it('when update progress', () => {
+    component.pins = PINS;
+    const pin = PINS[0];
+    const updatePin = spyOn((<any>component).repository, 'updatePin').and.returnValue(of(true));
+    const open = spyOn((<any>component).snackBar, 'open');
+    const pinService = TestBed.get(PinsService);
+
+    pinService.resolve('save');
+    expect(open).toHaveBeenCalled();
   });
 });
