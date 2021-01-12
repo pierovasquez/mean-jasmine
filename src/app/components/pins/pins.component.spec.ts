@@ -27,7 +27,7 @@ class RepositoryServiceStub {
 }
 
 class MatSnackBarStub {
-  open() {}
+  open() { }
 }
 
 class PinsServiceStub {
@@ -50,7 +50,7 @@ fdescribe('PinsComponent', () => {
       providers: [
         { provide: RepositoryService, useClass: RepositoryServiceStub },
         { provide: MatSnackBar, useClass: MatSnackBarStub },
-        { provide: PinsService, useClass: PinsServiceStub}
+        { provide: PinsService, useClass: PinsServiceStub }
       ],
       imports: [ReactiveFormsModule],
       schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]
@@ -76,14 +76,22 @@ fdescribe('PinsComponent', () => {
     expect(open).toHaveBeenCalledWith('https://piero.com', '_blank');
   });
 
-  it('when update progress', () => {
+  it('When update progress', () => {
     component.pins = PINS;
     const pin = PINS[0];
     const updatePin = spyOn((<any>component).repository, 'updatePin').and.returnValue(of(true));
     const open = spyOn((<any>component).snackBar, 'open');
+    // se obtiene la instancia del servicio guardada en el Componente que se esta probando
     const pinService = TestBed.get(PinsService);
+    const repository = TestBed.get(RepositoryService);
 
+    // se ejecuta el metodo del servicio para que tenga listo el Observable que devuelve
+    repository.updatePin(pin._id, pin);
     pinService.resolve('save');
-    expect(open).toHaveBeenCalled();
+
+    expect(updatePin).toHaveBeenCalledWith(pin._id, pin);
+    expect(open).toHaveBeenCalledWith('Progress updated!', 'OK', {
+      duration: 2000
+    });
   });
 });
