@@ -9,9 +9,9 @@ fdescribe('MenuComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MenuComponent ]
+      declarations: [MenuComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -30,5 +30,13 @@ fdescribe('MenuComponent', () => {
       expect(result).toBe(value);
     });
     component.clicked.next(value);
+  });
+
+  it('testing click', () => {
+    const button = fixture.debugElement.query(By.css('button'));
+    console.log('counter', component.counter);
+    button.triggerEventHandler('click', null);
+    console.log('counter', component.counter);
+    expect(component.counter).toBe(1);
   });
 });
